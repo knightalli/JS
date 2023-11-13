@@ -32,14 +32,9 @@ console.log(array);
 let n2 = 22;
 let found = false;
 let array2 = [1, 22, 3, -4];
-for (let index = 0; index < array2.length; index++) {
-    if (n2 === array2[index]) {
-        console.log(`${n2} найден в массиве`);
-        found = true;
-        break;        
-    } else continue;
-}
-if (!found) console.log('Элемент не найден')
+let index = array2.indexOf(n2);
+if (index === -1) console.log('Элемент не найден')
+else console.log(`${n2} найден на ${index + 1} месте`)
 
 //Задача 4
 //Даны два массива:
@@ -52,7 +47,5 @@ if (!found) console.log('Элемент не найден')
 let arr1 = [2, 2, 17, 21, 45, 12, 54, 31, 53];
 let arr2 = [12, 44, 23, 5];
 
-for (let i = 0; i < arr2.length; i++) {
-    arr1.push(arr2[i]);
-}
-console.log(arr1);
+let arr3 = arr1.concat(arr2);
+console.log(arr3);

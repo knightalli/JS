@@ -12,10 +12,10 @@ if (password.length >= 4 && (password.includes('-') || password.includes('_'))){
 let userName = 'нАТашА';
 let userSurname = 'Миронова';
 
-let newUserName = userName.substring(0, 1).toUpperCase();
+let newUserName = userName[1].toUpperCase();
 newUserName += userName.substring(1).toLowerCase();
 
-let newUserSurname = userSurname.substring(0, 1).toUpperCase();
+let newUserSurname = userSurname[1].toUpperCase();
 newUserSurname += userSurname.substring(1).toLowerCase();
 
 console.log(userName === newUserName ? 'Имя осталось без изменений' : 'Имя было преобразовано');
