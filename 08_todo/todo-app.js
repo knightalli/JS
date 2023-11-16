@@ -1,4 +1,24 @@
+//function newId(array) {
+//    let max = 0;    
+//    for (id of array) {
+//        if (id.id > max) max = id.id;
+//    }
+//    return max+1;
+//    }); 
+//}
+//Почему-то не работает
+
 (function () {
+
+    function setData(id, data) {
+        let jsonData = JSON.stringify(data);
+        localStorage.setItem(id, jsonData);
+    }
+
+    function getData(id) {
+        localStorage.getItemetItem(id);
+    }
+
     //создаём и возвращаем заголовок приложения
     function createAppTitle(title) {
         let appTitle = document.createElement('h2');
@@ -24,6 +44,15 @@
         form.append(input);
         form.append(buttonWrapper);
 
+        button.disabled = true;
+        
+        input.addEventListener('input', function() {
+            if (input.value === '') {
+                button.disabled = true;
+            }
+            else button.disabled = false;
+        });
+
         return {
             form,
             input,
@@ -38,7 +67,7 @@
         return list;
     }
 
-    function createTodoItem (name) {
+    function createTodoItem (obj) {
         let item = document.createElement('li');
         //кпонки помещаем в элемент, который красиво покажет их в одной группе
         let buttonGroup = document.createElement('div');
@@ -47,7 +76,7 @@
 
         //устанавливаем стили для элемента списка, а также дял размещения кнопок в его правой части с помощью flex
         item.classList.add('list-group-item', 'd-flex', 'justify-content-between', 'align-items-center');
-        item.textContent = name;
+        item.textContent = obj.name;        
 
         buttonGroup.classList.add('btn-group', 'btn-group-sm');
         doneButton.classList.add('btn', 'btn-success');
@@ -66,34 +95,49 @@
         };
     }
 
-    function createTodoApp(container, title = 'Список дел') {
+    function createTodoApp(container, title = 'Список дел', ) {
         let todoAppTitle = createAppTitle(title);
         let todoItemForm = createTodoItemForm();
         let todoList = createTodoList();
+        let things = [];
 
         container.append(todoAppTitle);
         container.append(todoItemForm.form);
         container.append(todoList);
+        
 
         //браузер создает событие submit на форме по нажатию на Enter или на кнопку создания дела
         todoItemForm.form.addEventListener('submit', function(e) {
             //эта строчка необходима, чтобы предотвратить стандартное поведение браузера (в данном случае, перезагрузка при отправке формы)
             e.preventDefault();
+            let thisItem = {id: Math.round(Math.random() * 1000000), name: todoItemForm.input.value, done: false};
+            things.push(thisItem);
+            
 
             //игноирируем созлание элемента, если пользователь ничего не ввёл в поле
-            if (!todoItemForm.input.value) {
+            if (!todoItemForm.input.value) {                
                 return;
             }
 
-            let todoItem = createTodoItem(todoItemForm.input.value);
+            let todoItem = createTodoItem(thisItem);
+            todoItem.item.id = thisItem.id;
 
             //добавляем обработчики на кнопки
             todoItem.doneButton.addEventListener('click', function() {
-                todoItem.item.classList.toggle('list-group-item-success')
+                todoItem.item.classList.toggle('list-group-item-success');
+                for (thing of things) {
+                    if (thing.id === todoItem.item.id) {
+                        thing.done = !thing.done;
+                    }
+                }                
             });
             todoItem.deleteButton.addEventListener('click', function() {
                 if (confirm('Вы уверены?')) {
                     todoItem.item.remove();
+                    let index = things.indexOf(todoItem.item);
+                    things.splice(index, 1);
+                    setData()
+
                 }
             });
 
@@ -101,9 +145,12 @@
 
             //обнуляем значение в поле формы
             todoItemForm.input.value = '';
+            todoItemForm.button.disabled = true;
         });
     }    
 
     window.createTodoApp = createTodoApp;
 }) ();
+
+
 
