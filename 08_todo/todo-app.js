@@ -16,7 +16,9 @@
     }
 
     function getData(id) {
-        localStorage.getItemetItem(id);
+        let data = localStorage.getItem(id);
+        data = data ? JSON.parse(data) : [];
+        return data;
     }
 
     //создаём и возвращаем заголовок приложения
@@ -67,7 +69,7 @@
         return list;
     }
 
-    function createTodoItem (obj) {
+    function createTodoItem (obj, things, listName) {
         let item = document.createElement('li');
         //кпонки помещаем в элемент, который красиво покажет их в одной группе
         let buttonGroup = document.createElement('div');
@@ -88,6 +90,28 @@
         buttonGroup.append(deleteButton);
         item.append(buttonGroup);
 
+        if (obj.done === true) item.classList.toggle('list-group-item-success');
+
+        
+        //добавляем обработчики на кнопки
+        doneButton.addEventListener('click', function() {
+            item.classList.toggle('list-group-item-success');
+            for (let thing of things) {
+                if (thing.id.toString() === item.id) {
+                    thing.done = !thing.done;
+                }
+            }
+            setData(listName, things);                
+        });
+        deleteButton.addEventListener('click', function() {
+            if (confirm('Вы уверены?')) {
+                item.remove();
+                let index = things.indexOf(item);
+                things.splice(index, 1);
+                setData(listName, things);
+            }
+        });
+
         return {
             item,
             doneButton,
@@ -95,11 +119,20 @@
         };
     }
 
-    function createTodoApp(container, title = 'Список дел', ) {
+    function createTodoApp(container, title = 'Список дел', listName = 'my') {
         let todoAppTitle = createAppTitle(title);
         let todoItemForm = createTodoItemForm();
         let todoList = createTodoList();
-        let things = [];
+        let things = getData(listName);
+
+        if (things.length !== 0) {
+            for (let thing of things) {
+                let thisTodoItem = createTodoItem(thing, things, listName);
+                thisTodoItem.item.id = thing.id;
+                todoList.append(thisTodoItem.item);  
+            }
+        }
+                
 
         container.append(todoAppTitle);
         container.append(todoItemForm.form);
@@ -112,40 +145,22 @@
             e.preventDefault();
             let thisItem = {id: Math.round(Math.random() * 1000000), name: todoItemForm.input.value, done: false};
             things.push(thisItem);
-            
+               
 
             //игноирируем созлание элемента, если пользователь ничего не ввёл в поле
             if (!todoItemForm.input.value) {                
                 return;
             }
 
-            let todoItem = createTodoItem(thisItem);
-            todoItem.item.id = thisItem.id;
-
-            //добавляем обработчики на кнопки
-            todoItem.doneButton.addEventListener('click', function() {
-                todoItem.item.classList.toggle('list-group-item-success');
-                for (thing of things) {
-                    if (thing.id === todoItem.item.id) {
-                        thing.done = !thing.done;
-                    }
-                }                
-            });
-            todoItem.deleteButton.addEventListener('click', function() {
-                if (confirm('Вы уверены?')) {
-                    todoItem.item.remove();
-                    let index = things.indexOf(todoItem.item);
-                    things.splice(index, 1);
-                    setData()
-
-                }
-            });
+            let todoItem = createTodoItem(thisItem, things, listName);
+            todoItem.item.id = thisItem.id; 
 
             todoList.append(todoItem.item);
 
             //обнуляем значение в поле формы
             todoItemForm.input.value = '';
             todoItemForm.button.disabled = true;
+            setData(listName, things);  
         });
     }    
 
