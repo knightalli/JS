@@ -2,11 +2,7 @@
 //Напишите в файле task_2.js функцию filter(), фильтрующую массив объектов по значению свойства. Массив, название свойства и нужное значение должны передаваться в качестве аргументов.
 
 function filter(objects, features, value) {
-    let tempObjects = [];
-    for (let obj of objects) {
-        if (obj[features] === value) tempObjects.push(obj);
-    }
-    return tempObjects;
+    return objects.filter(obj => obj[features] === value);    
 }
 
 let objects = [

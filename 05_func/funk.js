@@ -18,12 +18,8 @@ let whiteList = ['my-email@gmail.ru', 'jsfunc@mail.ru', 'annavkmail@vk.ru', 'ful
 // Массив с почтовыми адресами в чёрном списке:
 let blackList = ['jsfunc@mail.ru','goodday@day.ru']
 
-function filter(arr1, arr2) {
-    let tempArr = [];
-    for (let i of arr1) {
-        if (!arr2.includes(i)) tempArr.push(i);        
-    }
-    return tempArr;
+function filter(whiteList, blackList) {
+    return whiteList.filter(el => !blackList.includes(el))
 }
 // Вызов созданной функции:
 let result = filter(whiteList, blackList);
@@ -33,17 +29,8 @@ console.log(result);
 //Создайте функцию arrSort(), аргументом (параметром) которой будет массив. Задача функции — сделать сортировку элементов переданного массива по возрастанию. Функция должна вернуть отсортированный массив, а результат выполнения функции должен быть выведен в консоль с помощью console.log.
 
 function arrSort(arr) {
-    for (let i = 0; i < arr.length; i++) {
-        for(let j = 0; j < arr.length - 1; j++) {
-            if (arr[j] > arr[j + 1]) {
-                let temp = arr[j];
-                arr[j] = arr[j + 1];
-                arr[j + 1] = temp;
-            }
-        }
-    }
+    return arr.sort(function(a, b){return a - b});;
 }
 let arra = [12, 4, -2, 56, 2];
-arrSort(arra);
-console.log(arra);
+console.log(arrSort(arra));
 

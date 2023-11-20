@@ -35,11 +35,8 @@ let allUsers=[
    ]
    
 function getOlderUserArray(users) {
-     let olderUser = {...users[0]};
-    for (user of users) {
-        if (user.age > olderUser.age) olderUser = user;
-    }
-    return olderUser.name;
+    users.sort((a, b) => b.age - a.age)
+    return users[0].name;
 }
 
 let res = getOlderUserArray(allUsers);

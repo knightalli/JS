@@ -1,14 +1,15 @@
-//function newId(array) {
-//    let max = 0;    
-//    for (id of array) {
-//        if (id.id > max) max = id.id;
-//    }
-//    return max+1;
-//    }); 
-//}
-//Почему-то не работает
+
 
 (function () {
+
+    function newId(array) {
+        let max = 0;    
+        for (id of array) {
+            if (id.id > max) max = id.id;
+            else max = 0;
+        }
+        return max+1;
+        }; 
 
     function setData(id, data) {
         let jsonData = JSON.stringify(data);
@@ -49,10 +50,7 @@
         button.disabled = true;
         
         input.addEventListener('input', function() {
-            if (input.value === '') {
-                button.disabled = true;
-            }
-            else button.disabled = false;
+            button.disabled = !input.value;
         });
 
         return {
@@ -90,14 +88,14 @@
         buttonGroup.append(deleteButton);
         item.append(buttonGroup);
 
-        if (obj.done === true) item.classList.toggle('list-group-item-success');
+        if (obj.done) item.classList.toggle('list-group-item-success');
 
         
         //добавляем обработчики на кнопки
         doneButton.addEventListener('click', function() {
             item.classList.toggle('list-group-item-success');
             for (let thing of things) {
-                if (thing.id.toString() === item.id) {
+                if (thing.id == item.id) {
                     thing.done = !thing.done;
                 }
             }
@@ -106,7 +104,9 @@
         deleteButton.addEventListener('click', function() {
             if (confirm('Вы уверены?')) {
                 item.remove();
-                let index = things.indexOf(item);
+                let neededThing = things.filter(thing => thing.id == item.id);        
+                let neededItem = neededThing[0];
+                let index = things.indexOf(neededItem);   
                 things.splice(index, 1);
                 setData(listName, things);
             }
@@ -125,7 +125,7 @@
         let todoList = createTodoList();
         let things = getData(listName);
 
-        if (things.length !== 0) {
+        if (!(!things.length)) {
             for (let thing of things) {
                 let thisTodoItem = createTodoItem(thing, things, listName);
                 thisTodoItem.item.id = thing.id;
@@ -143,7 +143,7 @@
         todoItemForm.form.addEventListener('submit', function(e) {
             //эта строчка необходима, чтобы предотвратить стандартное поведение браузера (в данном случае, перезагрузка при отправке формы)
             e.preventDefault();
-            let thisItem = {id: Math.round(Math.random() * 1000000), name: todoItemForm.input.value, done: false};
+            let thisItem = {id: newId(things), name: todoItemForm.input.value, done: false};
             things.push(thisItem);
                
 
