@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Список студентов</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+
+<body>
+    <!-- Этап 1. Создайте верстку элементов, которые будут статичны (неизменны).  -->
+    <div class="container mt-4">
+        <h2>Панель управления студентами</h2>
+
+          <div class="form-row">
+            <div class="col">
+              <input type="text" class="form-control" placeholder="Имя">
+            </div>
+            <div class="col">
+              <input type="text" class="form-control" placeholder="Фамилия">
+            </div>
+            <div class="col">
+              <input type="text" class="form-control" placeholder="Отчество">
+            </div>
+            <div class="col">
+              <input type="date" class="form-control date-control" min="1900-01-01">
+            </div>
+            <div class="col">
+              <input type="number" class="form-control" placeholder="Год начала обучения" min="2000" max="2023">
+            </div>
+            <div class="col">
+              <input type="text" class="form-control" placeholder="Факультет">
+            </div>
+            <div class="col">
+              <button class="btn btn-primary">Добавить студента</button>
+            </div>
+          </div>
+    
+        <table class="table mt-4">
+          <thead>
+            <tr>
+              <th>Ф. И. О.</th>
+              <th>Факультет</th>
+              <th>Дата рождения и возраст</th>
+              <th>Годы обучения</th>
+            </tr>
+          </thead>
+          <tbody class="studentTableBody">
+          </tbody>
+        </table>
+    
+          <div class="form-row">
+            <div class="col">
+              <input type="text" class="form-control" placeholder="Ф. И. О. для поиска">
+            </div>
+            <div class="col">
+              <input type="text" class="form-control" placeholder="Факультет для поиска">
+            </div>
+            <div class="col">
+              <input type="number" class="form-control" placeholder="Год начала обучения">
+            </div>
+            <div class="col">
+              <input type="number" class="form-control" placeholder="Год окончания обучения">
+            </div>
+            <div class="col">
+              <button class="btn btn-secondary">Применить фильтры</button>
+            </div>
+          </div>
+      </div>
+</body>
+<script defer src="main.js"></script>
+</html>
